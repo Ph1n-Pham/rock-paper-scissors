@@ -6,7 +6,7 @@ var io = require("socket.io")(http);
 //create route
 app.use(express.static('public'))
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/public/index.html");
 });
 
 waitingList = []
@@ -53,14 +53,6 @@ function removeSessionById(id) {
     }
 }
 
-function findSessionById(id){
-    for (let i = 0; i < gameSessions.length; i++) {
-        let gameSession = gameSessions[i]
-        if (gameSession.p1Id == id || gameSession.p2Id == id){
-            return gameSession
-        }
-    }
-}
 function removeWaitlistById(id) {
     for (let i = 0; i < waitingList.length; i++) {
         if (id == waitingList[i]) {
