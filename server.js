@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require("express");
 var app = express();
 var http = require("http").createServer(app);
@@ -6,7 +7,7 @@ var io = require("socket.io")(http);
 //create route
 app.use(express.static('public'))
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/public/index.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
 waitingList = []
@@ -154,5 +155,5 @@ function handleDealt(id, data) {
         return null
     }
 }
-http.listen(80);
+http.listen(process.env.PORT || 3000);
 
