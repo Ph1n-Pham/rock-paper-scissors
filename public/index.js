@@ -1,14 +1,30 @@
 var socket = io();
 
-$('form').submit(function (e) {
-    let msg = $("#msg").val();
-    e.preventDefault();
-    if (msg != '') {
-        socket.emit("clientmsg", $("#msg").val());
-        $("#msg").val('');
+class UI {
+    init() {
+        this.startListener()
+        this.handleFound()
+        this.handleDisconnectPlayer()
     }
-})
-
-socket.on('servermsg', function (msg) {
-    $("#message").append($('<li>').text(msg), $("#message"))
+    startListener() {
+        const startButton = document.querySelector('.start-button')
+        startButton.addEventListener('click', () => {
+            socket.emit('findPlayer')
+            document.querySelector('.container').innerHTML = 'Finding player...'
+        })
+    }
+    handleFound() {
+        socket.on('playerFound', () => {
+            document.querySelector('.container').innerHTML = 'Player found!'
+        })
+    }
+    handleDisconnectPlayer() {
+        socket.on('playerDisconnect', () => {
+            document.querySelector('.container').innerHTML = 'Player disconnected!'
+        })
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    ui = new UI
+    ui.init()
 })
