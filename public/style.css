@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+
 main {
-    background: linear-gradient(270deg, #dfb01e, #36a8dd);
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(270deg, #706897, #9088d4);
     background-size: 400% 400%;
 
     animation: gradientBg 20s ease infinite;
@@ -18,9 +21,127 @@ main{
 }
 .wrapper{
     display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+    width: 100%;
+    background-color: #ebcfc4;
+    border: 2px solid gray;
+    border-radius: 15px;
+}
+.start-button{
+    width: 50%;
+    height: 60px;
+    background-color: #fff3e2;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 25%;
+    margin-right: 25%;
+    border-radius: 15px;
+    border: 2px solid gray;
+    transition: all 0.3s ease;
+    font-size: 2rem;
+    letter-spacing: 0.25rem;
+}
+.start-button:focus{
+    outline: none;
+}
+
+.start-button:hover{
+    background-color:#ffd396;
+    transition: all 0.3s ease;
+}
+
+.container{
+    width: 90%;
+    height: 100%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    transition: all 0.3s ease;
+}
+.container h1{
+    font-size: 2rem;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.container ol{
+    font-size: 1.25rem;
+}
+.container ol li{
+    padding: 15px;
+}
+.container .illustration{
+    margin-top: 20px;
+    font-size: 3rem;
+}
+.container .illustration i{
+    padding: 20px;
+}
+.info{
+    height: 60px;
     width: 100%;
 }
+
+.info-button{
+    height: 100%;
+    width: 60px;
+    float: right;
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-info{
+    transition: all 0.3s ease;
+    border: 2px solid gray;
+    background-color: #deb09e;
+}
+@media only screen and (max-width: 700px) {
+    main{
+        width: 80vw;
+        height: 90vh;
+        margin: 0;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    .wrapper{
+        height: 100%;
+        width: 100%;
+    }
+    .container{
+        margin-left: 5%;
+        margin-right: 5%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+    .container h1{
+        font-size: 1rem;
+        padding: 15px;
+        margin: 0;
+    }
+    .container ol{
+        width: 90%;
+        list-style: none;
+        font-size: 1rem;
+    }
+    .container ol li{
+        padding: 10px;
+    }
+    .container .illustration{
+        font-size: 2rem;
+    }
+    .info{
+        height: 60px;
+    }
+  }
