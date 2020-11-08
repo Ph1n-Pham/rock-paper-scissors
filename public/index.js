@@ -106,7 +106,7 @@ class UI {
         })
     }
     loadModel() {
-        const URL = "https://teachablemachine.withgoogle.com/models/r00D_RGrB/";
+        const URL = "https://teachablemachine.withgoogle.com/models/Or-HJi7E0/";
         let model, webcam, labelContainer, maxPredictions;
         // Load the image model and setup the webcam
         async function initiateModel() {
