@@ -1,7 +1,7 @@
 var socket = io();
 let id = null
 socket.on('id', (data) => { id = data })
-
+var tempHtml = ''
 const infoButton = document.querySelector('.info-button')
 const overlay = document.querySelector('.overlay')
 const startButton = document.querySelector('.start-button')
@@ -21,6 +21,7 @@ class UI {
         infoButton.addEventListener('mouseover', () => {
             overlay.style.color = 'black'
             overlay.classList.add('overlay-info')
+            tempHtml = overlay.innerHTML
             overlay.innerHTML = `
                 <h1>Welcome to the live rock paper scissors game</h1>
                     <ol>
@@ -38,21 +39,24 @@ class UI {
         infoButton.addEventListener('mouseout', () => {
             overlay.style.color = 'white'
             overlay.classList.remove('overlay-info')
-            overlay.innerHTML = ``
+            overlay.innerHTML = tempHtml
         })
     }
     startListener() {
         startButton.addEventListener('click', () => {
             socket.emit('findPlayer')
             overlay.style.color = 'white'
+            tempHtml = overlay.innerHTML
             overlay.innerHTML = '<h1 class="h1-status">Finding player...</h1>'
         })
     }
     handleFound() {
         socket.on('playerFound', () => {
             overlay.style.color = 'white'
+            tempHtml = overlay.innerHTML
             overlay.innerHTML = '<h1 class="h1-status">Player found!</h1>'
             setTimeout(() => {
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = '<h1 class="h1-status">Starting game...</h1>'
                 socket.emit('startGame')
             }, 500)
@@ -62,6 +66,7 @@ class UI {
         socket.on('inGame', (data) => {
             const labelContainer = document.querySelector('#label-container')
             if (data != 'deal') {
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = `<h1 class="h1-status">${data}</h1>`
             } else {
                 socket.emit('dealt', labelContainer.innerText)
@@ -72,13 +77,17 @@ class UI {
         socket.on('result', async (session) => {
             if (session.p1Id == id) {
                 //you are player 1
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = `<p class="p-status">${session.p1dealt} - ${session.p2dealt}</p>`
                 await new Promise(resolve => setTimeout(resolve, 2000));
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = `<h1 class="h1-status">${session.p1Score} - ${session.p2Score}</h1>`
             } else {
                 //you are player 2
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = `<p class="p-status">${session.p2dealt} - ${session.p1dealt}</p>`
                 await new Promise(resolve => setTimeout(resolve, 2000));
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = `<h1 class="h1-status">${session.p2Score} - ${session.p1Score}</h1>`
             }
             //sleep for 1s
@@ -88,8 +97,10 @@ class UI {
     }
     handleDisconnectPlayer() {
         socket.on('playerDisconnect', () => {
+            tempHtml = overlay.innerHTML
             overlay.innerHTML = '<h1 class="h1-status">Player disconnected!</h1>'
             setTimeout(()=>{
+                tempHtml = overlay.innerHTML
                 overlay.innerHTML = ''
             }, 1000)
         })
