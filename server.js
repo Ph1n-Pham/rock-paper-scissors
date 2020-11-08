@@ -25,14 +25,13 @@ io.on('connection', function (socket) {
     });
     socket.on('startGame', () => {
         startGameHandler(id)
-        socket.on('dealt', (data) => {
-            session = handleDealt(id, data)
-            if (session){
-                io.to(session.p1Id).to(session.p2Id).emit('result', session)
-            }
-        })
     })
-
+    socket.on('dealt', (data) => {
+        session = handleDealt(id, data)
+        if (session) {
+            io.to(session.p1Id).to(session.p2Id).emit('result', session)
+        }
+    })
     socket.on('disconnect', () => {
         console.log(id, 'disconnected.');
         removeSessionById(id)
@@ -42,7 +41,6 @@ io.on('connection', function (socket) {
 
 function removeSessionById(id) {
     for (let i = 0; i < gameSessions.length; i++) {
-        console.log(gameSessions);
         let gameSession = gameSessions[i]
         if (gameSession.p1Id == id) {
             io.to(gameSession.p2Id).emit('playerDisconnect')
@@ -76,7 +74,8 @@ function findPlayerHandler(id) {
             p1dealtYet: false,
             p2dealtYet: false,
             p1dealt: null,
-            p2dealt: null
+            p2dealt: null,
+            rounds: 1
         })
         io.to(p1Id).to(p2Id).emit('playerFound')
     } else if (waitingList.length == 0) {
@@ -86,71 +85,67 @@ function findPlayerHandler(id) {
 
 function startGameHandler(id) {
     for (let i = 0; i < gameSessions.length; i++) {
-        gameSession = gameSessions[i]
-        if (gameSession.p1Id == id) {
-            gameSession.p1ready = true
-        } else if (gameSession.p2Id == id) {
-            gameSession.p2ready = true
+        if (gameSessions[i].p1Id == id) {
+            gameSessions[i].p1ready = true
+        } else if (gameSessions[i].p2Id == id) {
+            gameSessions[i].p2ready = true
         }
-        if (gameSession.p1ready == true && gameSession.p2ready == true) {
-            startGame(gameSession.p1Id, gameSession.p2Id)
+        if (gameSessions[i].p1ready == true && gameSessions[i].p2ready == true) {
+            gameSessions[i].p1ready = false
+            gameSessions[i].p2ready = false
+            startGame(gameSessions[i].p1Id, gameSessions[i].p2Id)
+            console.log('rounds: ', gameSessions[i].rounds);
         }
     }
-
 }
 
-function startGame(id1, id2) {
-    console.log('game started for', id1, 'and', id2);
-    setTimeout(() => {
-        io.to(id1).to(id2).emit('inGame', '3')
-    }, 1000)
-    setTimeout(() => {
-        io.to(id1).to(id2).emit('inGame', '2')
-    }, 2000)
-    setTimeout(() => {
-        io.to(id1).to(id2).emit('inGame', '1')
-    }, 3000)
-    setTimeout(() => {
-        io.to(id1).to(id2).emit('inGame', 'deal')
-    }, 4000)
+async function startGame(id1, id2) {
+    // console.log('game started for', id1, 'and', id2);
+    io.to(id1).to(id2).emit('inGame', '3')
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    io.to(id1).to(id2).emit('inGame', '2')
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    io.to(id1).to(id2).emit('inGame', '1')
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    io.to(id1).to(id2).emit('inGame', 'deal')
 }
 
 function handleDealt(id, data) {
     for (let i = 0; i < gameSessions.length; i++) {
-        gameSession = gameSessions[i]
-        p1dealt = gameSession.p1dealt
-        p2dealt = gameSession.p2dealt
-        
-        if (gameSession.p1Id == id) {
-            gameSession.p1dealt = data
-            gameSession.p1dealtYet = true
-        } else if (gameSession.p2Id == id) {
-            gameSession.p2dealt = data
-            gameSession.p2dealtYet = true
+        if (gameSessions[i].p1Id == id) {
+            gameSessions[i].p1dealt = data
+            gameSessions[i].p1dealtYet = true
+        } else if (gameSessions[i].p2Id == id) {
+            gameSessions[i].p2dealt = data
+            gameSessions[i].p2dealtYet = true
         }
-        if (gameSession.p1dealtYet == true && gameSession.p2dealtYet == true) {
-            if (p1dealt == 'rock') {
-                if (p2dealt == 'paper') {
-                    gameSession.p2Score = gameSession.p2Score + 1
-                } else if (p2dealt == 'scissors') {
-                    gameSession.p1Score = gameSession.p1Score + 1
+
+        if (gameSessions[i].p1dealtYet == true && gameSessions[i].p2dealtYet == true) {
+            gameSessions[i].p1dealtYet = false
+            gameSessions[i].p2dealtYet = false
+            if (gameSessions[i].p1dealt == 'Rock') {
+                if (gameSessions[i].p2dealt == 'Paper') {
+                    gameSessions[i].p2Score = gameSessions[i].p2Score + 1
+                } else if (gameSessions[i].p2dealt == 'Scissor') {
+                    gameSessions[i].p1Score = gameSessions[i].p1Score + 1
                 }
-            } else if (p1dealt == 'paper') {
-                if (p2dealt == 'rock') {
-                    gameSession.p1Score = gameSession.p1Score + 1
-                } else if (p2dealt == 'scissors') {
-                    gameSession.p2Score = gameSession.p2Score + 1
+            } else if (gameSessions[i].p1dealtt == 'Paper') {
+                if (gameSessions[i].p2dealt == 'Rock') {
+                    gameSessions[i].p1Score = gameSessions[i].p1Score + 1
+                } else if (gameSessions[i].p2dealt == 'Scissor') {
+                    gameSessions[i].p2Score = gameSessions[i].p2Score + 1
                 }
-            } else if (p1dealt == 'scissors') {
-                if (p2dealt == 'rock') {
-                    gameSession.p2Score = gameSession.p2Score + 1
-                } else if (p2dealt = 'paper') {
-                    gameSession.p1Score = gameSession.p1Score + 1
+            } else if (gameSessions[i].p1dealt == 'Scissor') {
+                if (gameSessions[i].p2dealt == 'Rock') {
+                    gameSessions[i].p2Score = gameSessions[i].p2Score + 1
+                } else if (gameSessions[i].p2dealt = 'Paper') {
+                    gameSessions[i].p1Score = gameSessions[i].p1Score + 1
                 }
             }
-            gameSession.p1dealtYet = false
-            gameSession.p2dealtYet = false
-            return gameSession
+            // console.log(gameSessions[i].p1Score, gameSessions[i].p2Score);
+            // console.log(gameSessions[i].p1dealt, gameSessions[i].p2dealt);
+            gameSessions[i].rounds = gameSessions[i].rounds + 1
+            return gameSessions[i]
         }
         return null
     }

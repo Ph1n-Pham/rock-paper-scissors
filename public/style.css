@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
-
 main {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(270deg, #706897, #9088d4);
     background-size: 400% 400%;
-
     animation: gradientBg 20s ease infinite;
 }
-*{
+
+* {
     margin: 0;
     padding: 0;
 }
-main{
+
+main {
     width: 70vw;
     height: 70vh;
     padding-top: 15vh;
@@ -19,7 +19,8 @@ main{
     padding-left: 15%;
     padding-right: 15%;
 }
-.wrapper{
+
+.wrapper {
     display: flex;
     flex-direction: column-reverse;
     height: 100%;
@@ -28,7 +29,10 @@ main{
     border: 2px solid gray;
     border-radius: 15px;
 }
-.start-button{
+
+
+
+.start-button {
     width: 50%;
     height: 60px;
     background-color: #fff3e2;
@@ -42,16 +46,23 @@ main{
     font-size: 2rem;
     letter-spacing: 0.25rem;
 }
-.start-button:focus{
-    outline: none;
-}
 
-.start-button:hover{
-    background-color:#ffd396;
+.start-button:disabled{
+    background-color: #ffd396;
+    color: #ffd396;
     transition: all 0.3s ease;
 }
 
-.container{
+.start-button:focus {
+    outline: none;
+}
+
+.start-button:hover {
+    background-color: #ffd396;
+    transition: all 0.3s ease;
+}
+
+.container {
     width: 90%;
     height: 100%;
     margin-left: 5%;
@@ -65,30 +76,13 @@ main{
     align-items: center;
     transition: all 0.3s ease;
 }
-.container h1{
-    font-size: 2rem;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-.container ol{
-    font-size: 1.25rem;
-}
-.container ol li{
-    padding: 15px;
-}
-.container .illustration{
-    margin-top: 20px;
-    font-size: 3rem;
-}
-.container .illustration i{
-    padding: 20px;
-}
-.info{
+
+.info {
     height: 60px;
     width: 100%;
 }
 
-.info-button{
+.info-button {
     height: 100%;
     width: 60px;
     float: right;
@@ -98,13 +92,79 @@ main{
     align-items: center;
 }
 
-.container-info{
+.overlay {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.overlay h1 {
+    font-size: 2rem;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.overlay ol {
+    font-size: 1.25rem;
+}
+
+.overlay ol li {
+    padding: 15px;
+}
+
+.overlay .illustration {
+    margin-top: 20px;
+    font-size: 3rem;
+}
+
+.overlay .illustration i {
+    padding: 20px;
+}
+
+.overlay-info {
     transition: all 0.3s ease;
     border: 2px solid gray;
     background-color: #deb09e;
 }
+
+.overlay .h1-status{
+    font-size: 3rem;
+    letter-spacing: 0.25rem;
+}
+.overlay .p-status{
+    font-size: 2rem;
+    letter-spacing: 0.25rem;
+}
+#webcam-container{
+    height: 100%;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#webcam-container canvas{
+    border: 2px solid gray;
+    border-radius: 15px;
+    width: auto;
+    height: 100%;
+}
+#label-container{
+    font-size: 2rem;
+    padding: 5px;
+    text-transform: capitalize;
+    letter-spacing: 0.25rem;
+}
 @media only screen and (max-width: 700px) {
-    main{
+    main {
         width: 80vw;
         height: 90vh;
         margin: 0;
@@ -113,11 +173,11 @@ main{
         padding-left: 10%;
         padding-right: 10%;
     }
-    .wrapper{
+    .wrapper {
         height: 100%;
         width: 100%;
     }
-    .container{
+    .container {
         margin-left: 5%;
         margin-right: 5%;
         margin-top: 20px;
@@ -125,23 +185,43 @@ main{
         border-radius: 15px;
         transition: all 0.3s ease;
     }
-    .container h1{
+    .overlay {
+        height: 65%;
+        width: 70%;
+    }
+    .overlay h1 {
         font-size: 1rem;
         padding: 15px;
         margin: 0;
     }
-    .container ol{
+    .overlay ol {
         width: 90%;
         list-style: none;
         font-size: 1rem;
     }
-    .container ol li{
+    .overlay ol li {
         padding: 10px;
     }
-    .container .illustration{
+    .overlay .illustration {
         font-size: 2rem;
     }
-    .info{
+    .overlay .illustration i {
+        padding: 10px;
+    }
+    .info {
         height: 60px;
     }
-  }
+    #webcam-container{
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #webcam-container canvas{
+        border: 2px solid gray;
+        border-radius: 15px;
+        width: 100%;
+        height: auto;
+    }
+}
